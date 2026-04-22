@@ -11,6 +11,14 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "updates": {
+      "enabled": true,
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/b99ff5a2-1bfb-45f7-b022-4e54e9be312d"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -25,7 +33,7 @@
     "plugins": [],
     "extra": {
       "eas": {
-        "projectId": "sudoku-daily"
+        "projectId": "b99ff5a2-1bfb-45f7-b022-4e54e9be312d"
       }
     }
   }
