@@ -32,6 +32,6 @@
   },
   "private": true,
   "devDependencies": {
-    "jest": "^30.3.0"
+    "jest": "^29.7.0"
   }
 }

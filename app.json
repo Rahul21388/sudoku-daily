@@ -25,10 +25,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.rahulprakash.sudokudaily",
-      "versionCode": 1,
-      "compileSdkVersion": 35,
-      "targetSdkVersion": 35,
-      "minSdkVersion": 24
+      "versionCode": 1
     },
     "plugins": [],
     "extra": {
