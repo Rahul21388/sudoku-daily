@@ -24,7 +24,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.sudokudaily.app",
+      "package": "com.rahulprakash.sudokudaily",
       "versionCode": 1,
       "compileSdkVersion": 35,
       "targetSdkVersion": 35,
