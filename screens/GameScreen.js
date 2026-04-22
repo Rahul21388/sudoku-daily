@@ -67,10 +67,10 @@ export default function GameScreen({ navigation }) {
     return () => sub?.remove();
   }, [pauseGame]);
 
-  // Handle back button
+  // Handle back button — fixed for RN 0.81 (subscription pattern)
   useFocusEffect(
     useCallback(() => {
-      const onBack = () => {
+      const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
         pauseGame();
         Alert.alert(
           'Leave Game',
@@ -81,9 +81,8 @@ export default function GameScreen({ navigation }) {
           ]
         );
         return true;
-      };
-      BackHandler.addEventListener('hardwareBackPress', onBack);
-      return () => BackHandler.removeEventListener('hardwareBackPress', onBack);
+      });
+      return () => subscription.remove();
     }, [pauseGame, resumeGame, navigation])
   );
 
@@ -248,7 +247,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  overlay: { 
+  overlay: {
     position: 'absolute',
     top: 0, left: 0, right: 0, bottom: 0,
     justifyContent: 'center',

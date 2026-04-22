@@ -12,7 +12,8 @@ function AppContent() {
     <View style={{ flex: 1, backgroundColor: colors.background }}>
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
-        backgroundColor={colors.background}
+        backgroundColor="transparent"
+        translucent={false}
       />
       <AppNavigator />
     </View>

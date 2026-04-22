@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
 import { Text } from 'react-native';
 import { useTheme } from '../hooks/useTheme';
@@ -12,20 +12,20 @@ import SettingsScreen from '../screens/SettingsScreen';
 import GameScreen from '../screens/GameScreen';
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
-function TabIcon({ label, focused, color }) {
+function TabIcon({ label }) {
   const icons = {
-    Daily: focused ? '📅' : '📅',
-    Play: focused ? '🎮' : '🎮',
-    Stats: focused ? '📊' : '📊',
-    Settings: focused ? '⚙️' : '⚙️',
+    Daily: '📅',
+    Play: '🎮',
+    Stats: '📊',
+    Settings: '⚙️',
   };
   return <Text style={{ fontSize: 22 }}>{icons[label] || '•'}</Text>;
 }
 
 function TabNavigator() {
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
 
   return (
     <Tab.Navigator

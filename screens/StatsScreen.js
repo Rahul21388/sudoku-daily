@@ -16,11 +16,11 @@ export default function StatsScreen() {
     : 0;
 
   const formatTime = (secs) => {
-    if (!secs) return '--:--';
-    const m = Math.floor(secs / 60);
-    const s = seconds % 60;
-    return `${m}:${s.toString().padStart(2, '0')}`;
-  };
+  if (!secs) return '--:--';
+  const m = Math.floor(secs / 60);
+  const s = secs % 60;  // was: seconds % 60
+  return `${m}:${s.toString().padStart(2, '0')}`;
+};
 
   const recentGames = stats.recentGames || [];
 
