@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Alert, AppState, BackHandler } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../hooks/useTheme';
 import { useHaptic } from '../hooks/useHaptic';
@@ -48,7 +49,6 @@ export default function GameScreen({ navigation }) {
   const highlightSameNumber = useSettingsStore(s => s.highlightSameNumber);
   const timerVisible = useSettingsStore(s => s.timerVisible);
 
-  // Timer
   useEffect(() => {
     timerRef.current = setInterval(() => {
       tick();
@@ -56,7 +56,6 @@ export default function GameScreen({ navigation }) {
     return () => clearInterval(timerRef.current);
   }, [tick]);
 
-  // App state - pause on background
   useEffect(() => {
     const sub = AppState.addEventListener('change', nextState => {
       if (appStateRef.current.match(/active/) && nextState.match(/inactive|background/)) {
@@ -67,7 +66,6 @@ export default function GameScreen({ navigation }) {
     return () => sub?.remove();
   }, [pauseGame]);
 
-  // Handle back button — fixed for RN 0.81 (subscription pattern)
   useFocusEffect(
     useCallback(() => {
       const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -86,7 +84,6 @@ export default function GameScreen({ navigation }) {
     }, [pauseGame, resumeGame, navigation])
   );
 
-  // Game completion
   useEffect(() => {
     if (isComplete) {
       haptic.success();
@@ -139,7 +136,7 @@ export default function GameScreen({ navigation }) {
 
   if (isComplete || isFailed) {
     return (
-      <View style={[styles.overlay, { backgroundColor: colors.background }]}>
+      <SafeAreaView style={[styles.overlay, { backgroundColor: colors.background }]} edges={['top']}>
         <View style={[styles.resultCard, { backgroundColor: colors.surface }]}>
           <Text style={styles.resultEmoji}>{isComplete ? '🎉' : '😞'}</Text>
           <Text style={[styles.resultTitle, { color: colors.text }]}>
@@ -177,13 +174,13 @@ export default function GameScreen({ navigation }) {
             <Text style={styles.newGameBtnText}>New Game</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
   if (isPaused) {
     return (
-      <View style={[styles.overlay, { backgroundColor: colors.background }]}>
+      <SafeAreaView style={[styles.overlay, { backgroundColor: colors.background }]} edges={['top']}>
         <View style={[styles.resultCard, { backgroundColor: colors.surface }]}>
           <Text style={styles.resultEmoji}>⏸️</Text>
           <Text style={[styles.resultTitle, { color: colors.text }]}>Game Paused</Text>
@@ -194,12 +191,12 @@ export default function GameScreen({ navigation }) {
             <Text style={styles.newGameBtnText}>Resume</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <GameHeader
         difficulty={difficulty}
         mistakes={mistakes}
@@ -236,24 +233,22 @@ export default function GameScreen({ navigation }) {
         hintsRemaining={maxHints - hintsUsed}
         colors={colors}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingTop: 48 },
+  container: { flex: 1, paddingTop: 8 },
   gridContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   overlay: {
-    position: 'absolute',
-    top: 0, left: 0, right: 0, bottom: 0,
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 32,
-    zIndex: 10,
   },
   resultCard: {
     width: '100%',

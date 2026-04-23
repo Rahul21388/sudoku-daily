@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import dayjs from 'dayjs';
 import { db } from '../config/firebase';
@@ -55,7 +56,7 @@ export default function DailyScreen({ navigation }) {
   const isCompleted = stats.dailyHistory && stats.dailyHistory[today]?.completed;
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
         <Text style={[styles.title, { color: colors.text }]}>Sudoku Daily</Text>
         <Text style={[styles.date, { color: colors.textSecondary }]}>{displayDate}</Text>
@@ -124,13 +125,13 @@ export default function DailyScreen({ navigation }) {
           </View>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
-  header: { marginTop: 40, marginBottom: 24 },
+  header: { marginTop: 12, marginBottom: 24 },
   title: { fontSize: 32, fontWeight: '800' },
   date: { fontSize: 16, marginTop: 4, fontWeight: '500' },
   card: {

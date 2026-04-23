@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
 import { useGameStore } from '../store/gameStore';
 
@@ -16,65 +17,66 @@ export default function StatsScreen() {
     : 0;
 
   const formatTime = (secs) => {
-  if (!secs) return '--:--';
-  const m = Math.floor(secs / 60);
-  const s = secs % 60;  // was: seconds % 60
-  return `${m}:${s.toString().padStart(2, '0')}`;
-};
-
-  const recentGames = stats.recentGames || [];
+    if (!secs) return '--:--';
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
 
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: colors.background }]}
-      contentContainerStyle={styles.content}
-    >
-      <Text style={[styles.title, { color: colors.text }]}>Statistics</Text>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top']}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.content}
+      >
+        <Text style={[styles.title, { color: colors.text }]}>Statistics</Text>
 
-      <View style={styles.statsGrid}>
-        {[
-          { value: stats.gamesPlayed, label: 'Played' },
-          { value: `${winRate}%`, label: 'Win Rate' },
-          { value: stats.currentStreak, label: 'Streak' },
-          { value: stats.bestStreak, label: 'Best Streak' },
-        ].map((item, idx) => (
-          <View
-            key={idx}
-            style={[styles.statCard, { backgroundColor: colors.surface, shadowColor: colors.cardShadow }]}
-          >
-            <Text style={[styles.statValue, { color: colors.primary }]}>{item.value}</Text>
-            <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{item.label}</Text>
-          </View>
-        ))}
-      </View>
+        <View style={styles.statsGrid}>
+          {[
+            { value: stats.gamesPlayed, label: 'Played' },
+            { value: `${winRate}%`, label: 'Win Rate' },
+            { value: stats.currentStreak, label: 'Streak' },
+            { value: stats.bestStreak, label: 'Best Streak' },
+          ].map((item, idx) => (
+            <View
+              key={idx}
+              style={[styles.statCard, { backgroundColor: colors.surface, shadowColor: colors.cardShadow }]}
+            >
+              <Text style={[styles.statValue, { color: colors.primary }]}>{item.value}</Text>
+              <Text style={[styles.statLabel, { color: colors.textSecondary }]}>{item.label}</Text>
+            </View>
+          ))}
+        </View>
 
-      <View style={[styles.card, { backgroundColor: colors.surface, shadowColor: colors.cardShadow }]}>
-        <Text style={[styles.cardTitle, { color: colors.text }]}>Best Times</Text>
-        {['easy', 'medium', 'hard', 'expert'].map(diff => (
-          <View key={diff} style={[styles.bestRow, { borderBottomColor: colors.border }]}>
-            <Text style={[styles.bestDiff, { color: colors.text }]}>
-              {diff.charAt(0).toUpperCase() + diff.slice(1)}
-            </Text>
-            <Text style={[styles.bestTime, { color: colors.primary }]}>
-              {formatTime(stats.bestTimes[diff])}
-            </Text>
-          </View>
-        ))}
-      </View>
+        <View style={[styles.card, { backgroundColor: colors.surface, shadowColor: colors.cardShadow }]}>
+          <Text style={[styles.cardTitle, { color: colors.text }]}>Best Times</Text>
+          {['easy', 'medium', 'hard', 'expert'].map(diff => (
+            <View key={diff} style={[styles.bestRow, { borderBottomColor: colors.border }]}>
+              <Text style={[styles.bestDiff, { color: colors.text }]}>
+                {diff.charAt(0).toUpperCase() + diff.slice(1)}
+              </Text>
+              <Text style={[styles.bestTime, { color: colors.primary }]}>
+                {formatTime(stats.bestTimes[diff])}
+              </Text>
+            </View>
+          ))}
+        </View>
 
-      <View style={[styles.card, { backgroundColor: colors.surface, shadowColor: colors.cardShadow }]}>
-        <Text style={[styles.cardTitle, { color: colors.text }]}>Average Time</Text>
-        <Text style={[styles.avgTime, { color: colors.primary }]}>{formatTime(avgTime)}</Text>
-        <Text style={[styles.avgLabel, { color: colors.textSecondary }]}>per completed game</Text>
-      </View>
-    </ScrollView>
+        <View style={[styles.card, { backgroundColor: colors.surface, shadowColor: colors.cardShadow }]}>
+          <Text style={[styles.cardTitle, { color: colors.text }]}>Average Time</Text>
+          <Text style={[styles.avgTime, { color: colors.primary }]}>{formatTime(avgTime)}</Text>
+          <Text style={[styles.avgLabel, { color: colors.textSecondary }]}>per completed game</Text>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: { flex: 1 },
   container: { flex: 1 },
   content: { padding: 20, paddingBottom: 40 },
-  title: { fontSize: 28, fontWeight: '800', marginBottom: 24, marginTop: 40 },
+  title: { fontSize: 28, fontWeight: '800', marginBottom: 24, marginTop: 12 },
   statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 24 },
   statCard: {
     width: '48%',

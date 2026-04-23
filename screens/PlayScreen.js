@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
 import { useGameStore } from '../store/gameStore';
 import { generatePuzzle } from '../utils/sudokuGenerator';
@@ -24,7 +25,7 @@ export default function PlayScreen({ navigation }) {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <Text style={[styles.title, { color: colors.text }]}>New Game</Text>
       <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Select your difficulty level</Text>
 
@@ -57,7 +58,7 @@ export default function PlayScreen({ navigation }) {
       >
         <Text style={styles.startBtnText}>Start Puzzle</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
