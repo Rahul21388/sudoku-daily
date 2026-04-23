@@ -8,10 +8,13 @@ import { doc, getDoc } from 'firebase/firestore';
 import { useTheme } from '../hooks/useTheme';
 import { useGameStore } from '../store/gameStore';
 import { unflattenGrid } from '../utils/sudokuGenerator';
+import HowToPlayModal from '../components/HowToPlayModal';
+
 
 export default function DailyScreen({ navigation }) {
   const { colors } = useTheme();
   const [loading, setLoading] = useState(true);
+  const [showHelp, setShowHelp] = useState(false);
   const [dailyPuzzle, setDailyPuzzle] = useState(null);
   const stats = useGameStore(s => s.stats);
   const startGame = useGameStore(s => s.startGame);
@@ -58,9 +61,19 @@ export default function DailyScreen({ navigation }) {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
-        <Text style={[styles.title, { color: colors.text }]}>Sudoku Daily</Text>
-        <Text style={[styles.date, { color: colors.textSecondary }]}>{displayDate}</Text>
-      </View>
+  <View>
+    <Text style={[styles.title, { color: colors.text }]}>Sudoku Daily</Text>
+    <Text style={[styles.date, { color: colors.textSecondary }]}>{displayDate}</Text>
+  </View>
+  <TouchableOpacity
+    onPress={() => setShowHelp(true)}
+    style={[styles.helpBtn, { backgroundColor: colors.surface }]}
+  >
+    <Text style={[styles.helpBtnText, { color: colors.primary }]}>?</Text>
+  </TouchableOpacity>
+</View>
+
+<HowToPlayModal visible={showHelp} onClose={() => setShowHelp(false)} />
 
       <View style={[styles.card, { backgroundColor: colors.surface, shadowColor: colors.cardShadow }]}>
         <Text style={[styles.cardTitle, { color: colors.text }]}>Daily Challenge</Text>
@@ -131,7 +144,13 @@ export default function DailyScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20 },
-  header: { marginTop: 12, marginBottom: 24 },
+  header: {
+  marginTop: 12,
+  marginBottom: 24,
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+},
   title: { fontSize: 32, fontWeight: '800' },
   date: { fontSize: 16, marginTop: 4, fontWeight: '500' },
   card: {
@@ -163,4 +182,20 @@ const styles = StyleSheet.create({
   streakValue: { fontSize: 28, fontWeight: '800' },
   streakLabel: { fontSize: 12, marginTop: 4, fontWeight: '600' },
   divider: { width: 1, height: 40, backgroundColor: '#E2E8F0' },
+
+  helpBtn: {
+  width: 38,
+  height: 38,
+  borderRadius: 19,
+  alignItems: 'center',
+  justifyContent: 'center',
+  elevation: 2,
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.08,
+  shadowRadius: 4,
+},
+helpBtnText: {
+  fontSize: 18,
+  fontWeight: '800',
+},
 });

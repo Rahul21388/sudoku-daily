@@ -8,6 +8,7 @@ import { useTheme } from '../hooks/useTheme';
 
 import DailyScreen from '../screens/DailyScreen';
 import PlayScreen from '../screens/PlayScreen';
+import MiniSudokuScreen from '../screens/MiniSudokuScreen';
 import StatsScreen from '../screens/StatsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import GameScreen from '../screens/GameScreen';
@@ -15,16 +16,24 @@ import GameScreen from '../screens/GameScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function TabIcon({ label, color, size }) {
-  const icons = {
-    Daily:    { active: 'calendar',          inactive: 'calendar-outline' },
-    Play:     { active: 'game-controller',   inactive: 'game-controller-outline' },
-    Stats:    { active: 'bar-chart',         inactive: 'bar-chart-outline' },
-    Settings: { active: 'settings',          inactive: 'settings-outline' },
-  };
+const TAB_ICONS = {
+  Daily:    { active: 'calendar',         inactive: 'calendar-outline' },
+  Play:     { active: 'game-controller',  inactive: 'game-controller-outline' },
+  Mini:     { active: 'grid',             inactive: 'grid-outline' },
+  Stats:    { active: 'bar-chart',        inactive: 'bar-chart-outline' },
+  Settings: { active: 'settings',         inactive: 'settings-outline' },
+};
 
-  const icon = icons[label];
-  return <Ionicons name={icon ? icon.inactive : 'ellipse-outline'} size={size} color={color} />;
+function TabIcon({ name, focused, color, size }) {
+  const icon = TAB_ICONS[name];
+  if (!icon) return null;
+  return (
+    <Ionicons
+      name={focused ? icon.active : icon.inactive}
+      size={size}
+      color={color}
+    />
+  );
 }
 
 function TabNavigator() {
@@ -35,8 +44,8 @@ function TabNavigator() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarIcon: ({ color, size }) => (
-          <TabIcon label={route.name} color={color} size={size} />
+        tabBarIcon: ({ focused, color, size }) => (
+          <TabIcon name={route.name} focused={focused} color={color} size={size} />
         ),
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
@@ -53,9 +62,10 @@ function TabNavigator() {
         },
       })}
     >
-      <Tab.Screen name="Daily" component={DailyScreen} />
-      <Tab.Screen name="Play" component={PlayScreen} />
-      <Tab.Screen name="Stats" component={StatsScreen} />
+      <Tab.Screen name="Daily"    component={DailyScreen} />
+      <Tab.Screen name="Play"     component={PlayScreen} />
+      <Tab.Screen name="Mini"     component={MiniSudokuScreen} />
+      <Tab.Screen name="Stats"    component={StatsScreen} />
       <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
   );
