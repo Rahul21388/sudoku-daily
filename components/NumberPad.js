@@ -1,9 +1,12 @@
 import React, { memo } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const NumberPad = memo(({ onNumber, onErase, onHint, onNotes, notesMode, hintsRemaining, colors }) => {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingBottom: insets.bottom + 16 }]}>
       <View style={styles.numbersRow}>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
           <TouchableOpacity
@@ -29,27 +32,15 @@ const NumberPad = memo(({ onNumber, onErase, onHint, onNotes, notesMode, hintsRe
         <TouchableOpacity
           style={[
             styles.actionBtn,
-            {
-              backgroundColor: notesMode ? colors.primary : colors.numPadBg,
-            },
+            { backgroundColor: notesMode ? colors.primary : colors.numPadBg },
           ]}
           onPress={onNotes}
           activeOpacity={0.6}
         >
-          <Text
-            style={[
-              styles.actionIcon,
-              { color: notesMode ? colors.selectedCellText : colors.textSecondary },
-            ]}
-          >
+          <Text style={[styles.actionIcon, { color: notesMode ? colors.selectedCellText : colors.textSecondary }]}>
             ✏️
           </Text>
-          <Text
-            style={[
-              styles.actionLabel,
-              { color: notesMode ? colors.selectedCellText : colors.textSecondary },
-            ]}
-          >
+          <Text style={[styles.actionLabel, { color: notesMode ? colors.selectedCellText : colors.textSecondary }]}>
             Notes
           </Text>
         </TouchableOpacity>
@@ -57,10 +48,7 @@ const NumberPad = memo(({ onNumber, onErase, onHint, onNotes, notesMode, hintsRe
         <TouchableOpacity
           style={[
             styles.actionBtn,
-            {
-              backgroundColor: colors.numPadBg,
-              opacity: hintsRemaining > 0 ? 1 : 0.4,
-            },
+            { backgroundColor: colors.numPadBg, opacity: hintsRemaining > 0 ? 1 : 0.4 },
           ]}
           onPress={onHint}
           disabled={hintsRemaining <= 0}
