@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
-import { Text } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '../hooks/useTheme';
 
 import DailyScreen from '../screens/DailyScreen';
@@ -14,14 +14,16 @@ import GameScreen from '../screens/GameScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function TabIcon({ label }) {
+function TabIcon({ label, color, size }) {
   const icons = {
-    Daily: '📅',
-    Play: '🎮',
-    Stats: '📊',
-    Settings: '⚙️',
+    Daily:    { active: 'calendar',          inactive: 'calendar-outline' },
+    Play:     { active: 'game-controller',   inactive: 'game-controller-outline' },
+    Stats:    { active: 'bar-chart',         inactive: 'bar-chart-outline' },
+    Settings: { active: 'settings',          inactive: 'settings-outline' },
   };
-  return <Text style={{ fontSize: 22 }}>{icons[label] || '•'}</Text>;
+
+  const icon = icons[label];
+  return <Ionicons name={icon ? icon.inactive : 'ellipse-outline'} size={size} color={color} />;
 }
 
 function TabNavigator() {
@@ -31,8 +33,8 @@ function TabNavigator() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarIcon: ({ focused, color }) => (
-          <TabIcon label={route.name} focused={focused} color={color} />
+        tabBarIcon: ({ color, size }) => (
+          <TabIcon label={route.name} color={color} size={size} />
         ),
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
