@@ -40,4 +40,13 @@ export const useSettingsStore = create((set, get) => ({
     }
     await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(toSave));
   },
+
+  resetSettings: async () => {
+    set({ ...defaultSettings });
+    try {
+      await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(defaultSettings));
+    } catch {
+      // Silently fail — in-memory state is already reset
+    }
+  },
 }));
