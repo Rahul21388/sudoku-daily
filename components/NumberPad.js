@@ -1,24 +1,57 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-const NumberPad = memo(({ onNumber, onErase, onHint, onNotes, notesMode, hintsRemaining, colors }) => {
+// Derive which digits have been placed exactly 9 times
+const getCompletedDigits = (board) => {
+  if (!board) return new Set();
+  const counts = {};
+  for (const row of board) {
+    for (const cell of row) {
+      if (cell && cell >= 1 && cell <= 9) {
+        counts[cell] = (counts[cell] || 0) + 1;
+      }
+    }
+  }
+  return new Set(Object.keys(counts).filter(d => counts[d] === 9).map(Number));
+};
+
+const NumberPad = memo(({ onNumber, onErase, onHint, onNotes, notesMode, hintsRemaining, colors, board }) => {
   const insets = useSafeAreaInsets();
+
+  const completedDigits = useMemo(() => getCompletedDigits(board), [board]);
 
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom + 16 }]}>
       <View style={styles.numbersRow}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
-          <TouchableOpacity
-            key={num}
-            style={[styles.numBtn, { backgroundColor: colors.numPadBg }]}
-            onPress={() => onNumber(num)}
-            activeOpacity={0.6}
-          >
-            <Text style={[styles.numText, { color: colors.numPadText }]}>{num}</Text>
-          </TouchableOpacity>
-        ))}
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => {
+          const isCompleted = completedDigits.has(num);
+          return (
+            <TouchableOpacity
+              key={num}
+              style={[
+                styles.numBtn,
+                { backgroundColor: isCompleted ? colors.numPadBg : colors.numPadBg },
+                isCompleted && styles.numBtnCompleted,
+              ]}
+              onPress={() => !isCompleted && onNumber(num)}
+              activeOpacity={isCompleted ? 1 : 0.6}
+            >
+              <Text style={[
+                styles.numText,
+                { color: isCompleted ? colors.textSecondary : colors.numPadText },
+                isCompleted && styles.numTextCompleted,
+              ]}>
+                {num}
+              </Text>
+              {isCompleted && (
+                <Text style={[styles.completedTick, { color: colors.primary }]}>✓</Text>
+              )}
+            </TouchableOpacity>
+          );
+        })}
       </View>
+
       <View style={styles.actionsRow}>
         <TouchableOpacity
           style={[styles.actionBtn, { backgroundColor: colors.numPadBg }]}
@@ -80,10 +113,25 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
+  },
+  numBtnCompleted: {
+    opacity: 0.35,
   },
   numText: {
     fontSize: 22,
     fontWeight: '600',
+  },
+  numTextCompleted: {
+    fontSize: 18,
+  },
+  completedTick: {
+    position: 'absolute',
+    top: 2,
+    right: 3,
+    fontSize: 9,
+    fontWeight: '800',
+    lineHeight: 11,
   },
   actionsRow: {
     flexDirection: 'row',

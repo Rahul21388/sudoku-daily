@@ -225,6 +225,7 @@ export default function GameScreen({ navigation }) {
       </View>
 
       <NumberPad
+        board={board}
         onNumber={handleNumber}
         onErase={handleErase}
         onHint={handleHint}
