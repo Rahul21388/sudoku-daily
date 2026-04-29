@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useSettingsStore } from './store/settingsStore';
 import { useGameStore } from './store/gameStore';
 import { useTheme } from './hooks/useTheme';
+import { useOTAUpdate } from './hooks/useOTAUpdates';
 import AppNavigator from './navigation/AppNavigator';
 
 function AppContent() {
@@ -22,6 +23,8 @@ export default function App() {
   const [ready, setReady] = useState(false);
   const loadSettings = useSettingsStore(s => s.loadSettings);
   const loadStats = useGameStore(s => s.loadStats);
+
+  useOTAUpdate();
 
   useEffect(() => {
     async function init() {
